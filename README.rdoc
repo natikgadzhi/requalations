@@ -1,7 +1,7 @@
 = requalations
 
-Description goes here.
+Ruby Equalations is a tool to solve linalg equalations using all the flexibility of ruby. 
 
 == Copyright
 
-Copyright (c) 2009 railsmaniac. See LICENSE for details.
+Copyright (c) 2009 Nat Gadgibalaev.
