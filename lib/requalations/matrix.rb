@@ -17,7 +17,16 @@ module Requalations
       set_row( from, to_row)
     end
     
-
+    # Allows you to set matrix elements one by one
+    # 
+    def []=(row, column, value)
+      @rows[row][column] = value
+    end
+    
+    # These two methods are equal to []=
+    #  
+    alias_method :set_element, :[]=
+    alias_method :set_component, :[]= 
     
     # Retrieves LU decomposition matrices for the matrix. 
     # 
@@ -33,7 +42,7 @@ module Requalations
       n = self.column_size - 1
       
       # p matrix — matrix.identity by default. 
-      @p = Matrix.identity( n )
+      @p = ::Matrix.identity( self.column_size )
       
       # C matrix will contain l + u - identity
       @c = self.clone
@@ -58,18 +67,23 @@ module Requalations
         # get pivot value and index from the column
         pivot_value, pivot_index = column.slice(column_index..n).max_value_and_index
         
-        # check for singularity? 
+        # Swap column_index and pivotal_index rows in the identity matrix
+        # by this we're gonna get premutation matrix
+        # And in c matrixm, which will be our decomposition matrix 
+        @c.swap_rows!(pivot_index, column_index)
+        @p.swap_rows!(pivot_index, column_index)
         
-        # //меняем местами i-ю строку и строку с опорным элементом
-        # P.SwapRows(pivot, i);
-        # C.SwapRows(pivot, i);
-        # for( int j = i+1; j < n; j++ ) {
-        #     C[ j ][ i ] /= C[ i ][ i ];
-        #     for( int k = i+1; k < n; k++ ) 
-        #         C[ j ][ k ] -= C[ j ][ i ] * C[ i ][ k ];
-        # }
-
+        # Recalculate elements of c
+        for j in (column_index + 1)..n do
+          @c[j, column_index] = @c[j, column_index] / @c[column_index, column_index]
+          for k in ( column_index + 1)..n do
+            @c[j,k] = @c[j,k] - @c[j,column_index] * @c[column_index,k]
+          end
+        end
+        
       end 
+      
+      @c
       
     end
     
