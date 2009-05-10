@@ -8,7 +8,7 @@ module Requalations
       ## Constants 
       
       # These options are used in #solve method.
-      DEFAULT_SOLVE_OPTIONS = { :method => :solve_using_LU }
+      DEFAULT_SOLVE_OPTIONS = { :with => :LU }
       
       ## attributes
       
@@ -54,7 +54,7 @@ module Requalations
         options = DEFAULT_SOLVE_OPTIONS.merge( options )
         
         # By now, just send to self method, which need to be executed to solve
-        send options[:method]
+        send "solve_using_#{options[:with]}".to_sym
       end
       
       
@@ -92,6 +92,43 @@ module Requalations
             t = t + @left_side_matrix.c[i,j]*@solution_vector[j]
           end
           @solution_vector[i] = ( @solution_vector[i] - t )/@left_side_matrix.c[i,i]
+        end
+        
+        # Pass the results into a vector and return them
+        ::Vector.elements(@solution_vector)
+      end
+      
+      
+      # Use splines method to solve linear equalations system
+      # With 3-diagonal matrix of equalation at the left side 
+      # 
+      def solve_using_sweep
+        # First thing to do is setting p and q coeficients in 
+        # zeros
+        p = []
+        q = []
+        @solution_vector = []
+        
+        # P1 and Q1 depends only on left_matrix, so 
+        p[1] = @left_side_matrix[0,1] / -@left_side_matrix[0,0] 
+        q[1] = @right_side_vector[0] / @left_side_matrix[0,0]
+        
+        n = @left_side_matrix.column_size  
+        
+        # Direct flow of sweep method
+        for i in 2...n do
+          puts "direct<br>"
+          p[i] = @left_side_matrix[i-1,i] / ( -@left_side_matrix[i-1, i-1] - @left_side_matrix[i-1, i-2]*p[i-1] ) 
+          q[i] = ( @left_side_matrix[i-1,i-2]*q[i-1] - @right_side_vector[i-1] ) / 
+            ( -@left_side_matrix[i-1,i-1] - @left_side_matrix[i-1, i-2]*p[i-1] )
+        end
+        
+        @solution_vector[n-1] = q[n-1]
+        
+        # Reverse
+        (n-2).downto(0) do |i|
+          @solution_vector[i] = p[i+1]*@solution_vector[i+1] + q[i+1]
+          puts "reverse: solution#{i} => #{@solution_vector[i]}<br>"
         end
         
         # Pass the results into a vector and return them
