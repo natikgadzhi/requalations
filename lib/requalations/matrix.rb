@@ -87,7 +87,6 @@ module Requalations
       end
       
       # After all the calculations, we have c matrix with L + U - E  
-      
       # c = L + U - E And we know, that L is lower-triangular with 1 in the diagonal, so:
       @l = ::Matrix.identity( n )
       for i in 0...n do
@@ -99,8 +98,23 @@ module Requalations
       @u = @c - @l + ::Matrix.identity( n )
       
       [@l, @u, @p]
-    end
+    end # END lu 
     
+    
+    # Retrieves premutation matrix as a vector 
+    # 
+    def p_vector
+      if @p_vector.nil?
+        @p_vector = []
+        for i in 0...@p.column_size do
+          for j in 0...@p.column_size do
+            @p_vector[j] = i unless @p[i,j].eql?(0)
+          end
+        end
+        @p_vector = ::Vector.elements(@p_vector)
+      end
+      @p_vector
+    end # end p_vector
     
     
     ## Private instance methods
