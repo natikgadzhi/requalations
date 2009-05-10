@@ -8,6 +8,17 @@ module Requalations
     # Attribut reareds for p, l and u matrices in LPU decomposition
     attr_reader :l, :u, :p, :c
     
+    # Swaps two rows
+    #
+    def swap_rows!( from, to)
+      to_row = row(to)
+      
+      set_row( to, row(from))
+      set_row( from, to_row)
+    end
+    
+
+    
     # Retrieves LU decomposition matrices for the matrix. 
     # 
     def lu
@@ -57,16 +68,20 @@ module Requalations
         #     for( int k = i+1; k < n; k++ ) 
         #         C[ j ][ k ] -= C[ j ][ i ] * C[ i ][ k ];
         # }
-        
-      end
-      
-      
-      # initialize arrays for new matrices
-      rows_for_l = []
-      rows_for_u = []
+
+      end 
       
     end
     
+    ## Private instance methods
+    private
+    
+    # Sets row to supplied vector
+    #
+    def set_row( row_index, vector )
+      @rows[row_index] = vector.to_a
+    end
+
   end
 end
 
