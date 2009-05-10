@@ -11,6 +11,10 @@ module Requalations
     # Retrieves LU decomposition matrices for the matrix. 
     # 
     def lu
+      
+      # Check, if the matrix is singular.
+      raise StandardError.new("Equalation matrix can't be singular") if self.singular?
+      
       # We will use the matrix size in a plenty of places here, so 
       # we want to create a shorhand accessor. 
       # We want to iterate through the matrix elements, which are started from index 0, not 1, so
@@ -38,16 +42,21 @@ module Requalations
         # pass 0 to pivot value and index
         pivot_value = 0.0
         # index 0 would be a valid index, so we set it to -1 to know, if we'll find a valid pivot
-        pivot_index = -1 
+        pivot_index = -1
         
-        # iterate though the column under the main diagonal
-        for row_index in column_index..n
-          # Find max value there
-          if @c[row_index, column_index] > pivot_value
-            pivot_value = @c[row_index, column_index]
-            pivot_index = row_index
-          end
-        end
+        # get pivot value and index from the column
+        pivot_value, pivot_index = column.slice(column_index..n).max_value_and_index
+        
+        # check for singularity? 
+        
+        # //меняем местами i-ю строку и строку с опорным элементом
+        # P.SwapRows(pivot, i);
+        # C.SwapRows(pivot, i);
+        # for( int j = i+1; j < n; j++ ) {
+        #     C[ j ][ i ] /= C[ i ][ i ];
+        #     for( int k = i+1; k < n; k++ ) 
+        #         C[ j ][ k ] -= C[ j ][ i ] * C[ i ][ k ];
+        # }
         
       end
       

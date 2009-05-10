@@ -33,6 +33,12 @@ describe Vector do
     @column_vector.max_index.should == 2
   end
   
+  it "should get max_value_and_index correctly" do
+    value, index = @column_vector.max_value_and_index
+    value.should == 29.0
+    index.should == 2
+  end
+  
   it "should be able to slice vector" do
     @column_vector.slice(2..5).should == Vector.elements([ [29], [5], [10] ])
   end

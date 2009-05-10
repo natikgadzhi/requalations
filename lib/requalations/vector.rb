@@ -39,6 +39,18 @@ module Requalations
       self.to_a.index(min_element)
     end
     
+    # Retrieves maximum value for vector and index of the maximum value
+    # 
+    def max_value_and_index
+      [max, max_index]
+    end
+    
+    # Retrieves minimal value and index for that value.
+    # 
+    def min_value_and_index
+      [min, min_index]
+    end
+    
     # Retrieves a new vector which is a slice of the vector from A to B index
     def slice( range)
       ::Vector.elements( self.to_a.slice(range) )
