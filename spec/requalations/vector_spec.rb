@@ -6,6 +6,7 @@ describe Vector do
     # create a vector
     @vector = Vector.elements( [4,10,29,2,5,1] )
     @column_vector = Vector.elements( [ [1], [2], [29], [5], [10] ])
+    @column_for_abs = Vector.elements( [ [1], [-9], [8] ])
   end
   
   # It should have #max!
@@ -39,7 +40,26 @@ describe Vector do
     index.should == 2
   end
   
+  it "should get absolute_max element correctly" do
+    value, index = @column_for_abs.absolute_max_value_and_index
+    value.should == 9.0
+    index.should == 1
+  end
+  
   it "should be able to slice vector" do
     @column_vector.slice(2..5).should == Vector.elements([ [29], [5], [10] ])
+  end
+  
+  it "another slice example" do
+    @left_side_matrix = Matrix.rows([
+      [ 7, 8, 4, -6],
+      [ -1, 6, -2, -6],
+      [ 2, 9, 6, -4],
+      [ 5, 9, 1, 1]
+    ])
+    
+    v,i = @left_side_matrix.column(2).slice(2..3).absolute_max_value_and_index
+    v.should == 6
+    i.should == 0
   end
 end

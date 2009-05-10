@@ -8,6 +8,8 @@ require 'matrix'
 # I don't like the idea of using Ruby for some mathematics or other expensive calculations, they are even more expencive with ruby, but
 # i like the thought, that all this expencive staff is already rewritten in plain C there. 
 require 'mathn'
+require 'bigdecimal'
+require 'bigdecimal/ludcmp'
 
 # We will require some files from our requalations lib, so let's create a shorthand to requalations lib directory:
 requalations_dir = "#{File.dirname(__FILE__)}/requalations"

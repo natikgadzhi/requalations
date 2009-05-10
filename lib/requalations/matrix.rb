@@ -39,10 +39,10 @@ module Requalations
       # we want to create a shorhand accessor. 
       # We want to iterate through the matrix elements, which are started from index 0, not 1, so
       # we need to exclude 1 from elements count not to exceed matrix boundaries.
-      n = self.column_size - 1
+      n = self.column_size
       
       # p matrix — matrix.identity by default. 
-      @p = ::Matrix.identity( self.column_size )
+      @p = ::Matrix.identity(n)
       
       # C matrix will contain l + u - identity
       @c = self.clone
@@ -55,7 +55,7 @@ module Requalations
       row_index = 0;
       
       # Iterate throught columns
-      for column_index in 0..n do 
+      for column_index in 0...n do 
         # create a shorthand for current column
         column = self.column(column_index)
         
@@ -65,7 +65,14 @@ module Requalations
         pivot_index = -1
         
         # get pivot value and index from the column
-        pivot_value, pivot_index = column.slice(column_index..n).max_value_and_index
+        pivot_value, pivot_index = column.slice(column_index...n).absolute_max_value_and_index
+        
+        # We've retrieved pivot position in the column slice! 
+        # So we need to add slice prefix, that is column_index to the pivot_index
+        pivot_index += column_index 
+        # puts " -- in the column #{column}: "
+        # puts "pivot: #{pivot_value} at #{column_index}:#{pivot_index}"
+        # puts "but actual element there is #{column[pivot_index]} <br>"
         
         # Swap column_index and pivotal_index rows in the identity matrix
         # by this we're gonna get premutation matrix
@@ -74,17 +81,28 @@ module Requalations
         @p.swap_rows!(pivot_index, column_index)
         
         # Recalculate elements of c
-        for j in (column_index + 1)..n do
+        for j in (column_index + 1)...n do
           @c[j, column_index] = @c[j, column_index] / @c[column_index, column_index]
-          for k in ( column_index + 1)..n do
+          for k in ( column_index + 1)...n do
             @c[j,k] = @c[j,k] - @c[j,column_index] * @c[column_index,k]
           end
         end
         
-      end 
+      end
       
-      @c
+      # After all the calculations, we have c matrix with L + U - E  
       
+      # c = L + U  And we know, that L is lower-triangular with 1 in the diagonal, so:
+      @l = ::Matrix.identity( n )
+      for i in 0...n do
+        for j in 0...i
+          @l[i,j] = @c[i,j]
+        end
+      end
+      
+      @u = @c - @l + ::Matrix.identity( n )
+      
+      [@l, @u, @p]
     end
     
     ## Private instance methods
@@ -101,3 +119,4 @@ end
 
 # If Matrix is already initialized, include Requalations::Matrix into the original one
 Matrix.send( :include, ::Requalations::Matrix ) if defined?( Matrix )
+Matrix.send( :include, LUSolve) if defined?( Matrix )

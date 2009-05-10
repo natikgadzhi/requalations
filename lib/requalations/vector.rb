@@ -51,6 +51,15 @@ module Requalations
       [min, min_index]
     end
     
+    # Retrieve maximal element by abs and it's index
+    #
+    def absolute_max_value_and_index
+      positive, positive_index = max_value_and_index
+      negative, negative_index = min_value_and_index
+      
+      positive.abs > negative.abs ? [positive.abs, positive_index] : [negative.abs, negative_index]
+    end
+    
     # Retrieves a new vector which is a slice of the vector from A to B index
     def slice( range)
       ::Vector.elements( self.to_a.slice(range) )
@@ -70,7 +79,6 @@ module Requalations
     def min_element
       self.to_a.min
     end
-    
   end
 end
 

@@ -30,7 +30,11 @@ describe Matrix do
   end
   
   it "should get lu decomposition" do
-    puts @left_side_matrix.lu
+    l, u, p = @left_side_matrix.lu
+    a = l*u*p
+    
+    a.determinant.should == @left_side_matrix.determinant
+    a.should == @left_side_matrix
   end
   
 end
