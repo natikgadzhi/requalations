@@ -21,6 +21,13 @@ describe Matrix do
       [ 2, 9, 6, -4],
       [ 5, 9, 1, 1]
     ])
+    
+    @another_task_left = Matrix.rows([
+      [-2, -9, -3, 7],
+      [-7, 8, 2, 5],
+      [-6, 2, 0, 0],
+      [0, -3, 8, -3]
+    ])
   end
   
   it "should be able to swap rows" do
@@ -35,6 +42,13 @@ describe Matrix do
     
     a.determinant.should == @left_side_matrix.determinant
     a.should == @left_side_matrix
+  end
+  
+  it "ahother task to LU" do
+    l,u,p = @another_task_left.lu
+    a = l * u * p
+    a.determinant.should == @another_task_left.determinant
+    a.should == @another_task_left
   end
   
 end

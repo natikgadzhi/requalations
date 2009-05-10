@@ -50,10 +50,6 @@ module Requalations
       # Search for pivot elements
       # For that, we need to iterate through the columns
       
-      # Initialize column and row indeces 
-      column_index = 0;
-      row_index = 0;
-      
       # Iterate throught columns
       for column_index in 0...n do 
         # create a shorthand for current column
