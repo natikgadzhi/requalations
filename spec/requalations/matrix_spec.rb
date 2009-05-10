@@ -34,21 +34,26 @@ describe Matrix do
     @matrix.swap_rows!(1,2)
     @matrix.row(1).should == Vector.elements([7,8,9])
     @matrix.row(2).should == Vector.elements([4,5,6]) 
+    
+    @matrix.swap_rows!(0,2)
+    @matrix.row(0).should == Vector.elements([4,5,6])
+    @matrix.row(2).should == Vector.elements([1,2,3])    
   end
   
   it "should get lu decomposition" do
     l, u, p = @left_side_matrix.lu
-    a = l*u*p
     
-    a.determinant.should == @left_side_matrix.determinant
-    a.should == @left_side_matrix
+    a = p * @left_side_matrix
+    b = l * u
+
+    a.should == b
   end
   
   it "ahother task to LU" do
     l,u,p = @another_task_left.lu
-    a = l * u * p
-    a.determinant.should == @another_task_left.determinant
-    a.should == @another_task_left
+    a = p * @another_task_left
+    b = l*u
+    a.should == b
   end
   
 end

@@ -53,7 +53,7 @@ module Requalations
       # Iterate throught columns
       for column_index in 0...n do 
         # create a shorthand for current column
-        column = self.column(column_index)
+        column = @c.column(column_index)
         
         # pass 0 to pivot value and index
         pivot_value = 0.0
@@ -75,7 +75,7 @@ module Requalations
         # And in c matrixm, which will be our decomposition matrix 
         @c.swap_rows!(pivot_index, column_index)
         @p.swap_rows!(pivot_index, column_index)
-        
+
         # Recalculate elements of c
         for j in (column_index + 1)...n do
           @c[j, column_index] = @c[j, column_index] / @c[column_index, column_index]
@@ -88,7 +88,7 @@ module Requalations
       
       # After all the calculations, we have c matrix with L + U - E  
       
-      # c = L + U  And we know, that L is lower-triangular with 1 in the diagonal, so:
+      # c = L + U - E And we know, that L is lower-triangular with 1 in the diagonal, so:
       @l = ::Matrix.identity( n )
       for i in 0...n do
         for j in 0...i
@@ -101,7 +101,10 @@ module Requalations
       [@l, @u, @p]
     end
     
+    
+    
     ## Private instance methods
+    ## --------------------------------------------------------------------------------
     private
     
     # Sets row to supplied vector
