@@ -9,14 +9,16 @@ require 'matrix'
 # i like the thought, that all this expencive staff is already rewritten in plain C there. 
 require 'mathn'
 
+# We will require some files from our requalations lib, so let's create a shorthand to requalations lib directory:
+requalations_dir = "#{File.dirname(__FILE__)}/requalations"
+
 # After that we need to initialize our own matrix module. 
 # Ruby has a build in Matrix class
 # But it's not the one we need, it doesn't support some operations, we will define them in our module
 # and then just extend native Matrix class.
-require File.expand_path("#{File.dirname(__FILE__)}/requalations/matrix.rb")
-
-# At first we extend Ruby Matrix class functionality by extending it and including our Matrix module
-Matrix.send( :extend, ::Requalations::Matrix )
+# We'll include our modules into Matrix and Vector classes
+require File.expand_path("#{requalations_dir}/vector.rb")
+require File.expand_path("#{requalations_dir}/matrix.rb")
 
 # At this moment, it the right time to require equalation classes. 
-require File.expand_path("#{File.dirname(__FILE__)}/requalations/linear_equalations.rb")
+require File.expand_path("#{requalations_dir}/linear_equalations.rb")
