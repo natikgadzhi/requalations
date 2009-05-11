@@ -5,6 +5,23 @@ module Requalations
   # 
   module Vector
     
+    def self.blank(size)
+      data = []
+      0.upto(size - 1) {|i| data[i] = 0 }
+      ::Vector.elements(data)
+    end
+    
+    # Allows you to set matrix elements one by one
+    # 
+    def []=(position, value)
+      @elements[position] = value
+    end
+    
+    # These two methods are equal to []=
+    #  
+    alias_method :set_element, :[]=
+    alias_method :set_component, :[]=
+    
     ## Instance methods
     
     # Retrieves maximal vector element

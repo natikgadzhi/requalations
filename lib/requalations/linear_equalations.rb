@@ -54,7 +54,7 @@ module Requalations
         options = DEFAULT_SOLVE_OPTIONS.merge( options )
         
         # By now, just send to self method, which need to be executed to solve
-        send "solve_using_#{options[:with]}".to_sym
+        send "solve_using_#{options[:with]}".to_sym, options
       end
       
       
@@ -135,6 +135,53 @@ module Requalations
         ::Vector.elements(@solution_vector)
       end
       
+      
+      # Use simple iterations method to solve the equalation system 
+      # Jacobi method
+      # 
+      def solve_using_simple_iterations( options = {} )
+        
+        # Let's understand, what will we need here?
+        # Remember a shorthand for the left side matrix size
+        n =  @left_side_matrix.column_size
+        # Then create a blank vector for current solution vector
+        @solution_vector = Vector.blank(n)
+        # we will store a previous solution into this, so we don't loose previous iteration's data
+        prev_solution_vector = Vector.blank(n)
+        # Store epsilon 
+        eps = options.has_key?(:eps) ? options[:eps] : 0.001
+        iterations_count = 0
+        # Не забыть! 
+        # Правильно передавать точность в опциях solve, передавать ее внутри solve в конкретный метод. 
+        
+        # Process recalculations untill current iteration's step becomes smaller, when the epsolon
+        begin
+          # Let's say, we didn't change any element, so our step at this iteration is now 0
+          step = 0
+          iterations_count += 1
+          
+          # Calculate current solution vector
+          for i in 0...n do
+            @solution_vector[i] = -@right_side_vector[i]
+            for j in 0...n
+              unless j.eql?(i)
+                @solution_vector[i] += @left_side_matrix[i,j] * @solution_vector[j]
+              end
+            end
+            @solution_vector[i] /= -@left_side_matrix[i,i]
+          end
+          
+          # For each X(i) check, if Xi,k is for at least step different from Xi,k-1
+          for i in 0...n
+            step = [(prev_solution_vector[i] - @solution_vector[i]).abs, step].max # if this element's step is bigger — update step. 
+            prev_solution_vector[i] = @solution_vector[i] # and copy the value into our real (previous solution) vector
+          end
+            
+        end while step > eps
+          
+        @solution_vector = ::Vector.elements(prev_solution_vector)
+        [@solution_vector, iterations_count]
+      end      
     end
   end
 end
