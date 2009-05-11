@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-# Covers 1.3 and 1.4
+# Covers 1.3
 describe "Iterational Methods" do
   before(:each) do
     @equalation_data = [
@@ -23,7 +23,7 @@ describe "Iterational Methods" do
   
   it "Can solve using seidel method" do
     @equalation = Requalations::Linear::Equalation.new( @equalation_data)
-    vector, iterations_count = @equalation.solve({ :with => :seidel_method, :eps => 0.000000000000001 })
+    vector, iterations_count = @equalation.solve({ :with => :seidel_method, :eps => 0.00001 })
     puts vector.to_a.map { |e| e.round }
     
     puts "in #{iterations_count} iterations."
