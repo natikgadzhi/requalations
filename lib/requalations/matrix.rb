@@ -217,4 +217,10 @@ end
 
 # If Matrix is already initialized, include Requalations::Matrix into the original one
 Matrix.send( :include, ::Requalations::Matrix ) if defined?( Matrix )
-Matrix.send( :include, LUSolve) if defined?( Matrix )
+
+# Also include additional matrix modules. 
+# There are some modules for extended matrix functionality in ./lib/matrix directory 
+matrix_directory = File.dirname(__FILE__) + "/matrix"
+Dir.foreach(matrix_directory) do |filename|
+  require File.expand_path("#{matrix_directory}/#{filename}") if filename.split(/\./).last == "rb"
+end

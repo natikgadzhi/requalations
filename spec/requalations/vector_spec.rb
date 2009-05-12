@@ -50,6 +50,10 @@ describe Vector do
     @column_vector.slice(2..5).should == Vector.elements([ [29], [5], [10] ])
   end
   
+  it "should have #blank method on class" do
+    Vector.should respond_to(:blank)
+  end
+  
   it "another slice example" do
     @left_side_matrix = Matrix.rows([
       [ 7, 8, 4, -6],
