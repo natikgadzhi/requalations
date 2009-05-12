@@ -29,7 +29,6 @@ describe ::Matrix do
   it "should provide a valid QR decomposition" do
     # at least, we ensure that it raises no error and does something
     q, r, i = @matrix.qr
-    
     puts "Q: #{q}<br>R: #{r}<br> in #{i} iterations."
   end
   

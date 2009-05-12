@@ -68,17 +68,17 @@ module Requalations
                 sign = r_matrix[k,k] < 0 ? -1 : 1
                 norm = 0
                 for j in k...n
-                  norm = norm + r_matrix[j,i] ** 2
+                  norm = norm + r_matrix[j,k] ** 2
                 end
                 norm = norm ** 0.5
                 
                 v_vector[k] = [ r_matrix[k,k] + sign * norm ] 
               end
               
-              v_vector[k] = [ r_matrix[k,i] ]
+              v_vector[k] = [ r_matrix[i,k] ] if k > i
             end
             v_vector = ::Matrix.columns(v_vector).t
-            
+
             # Now let's get H matrix 
             multiplier = ( v_vector.t * v_vector )
             multiplier = 2 / multiplier[0,0]
@@ -88,9 +88,7 @@ module Requalations
             # R is one step closer. 
             # And q is too 
             r_matrix = h_matrix * r_matrix
-            q_matrix *= h_matrix         
-            
-            puts "#{iterations_count}: #{r_matrix}<br><br>"
+            q_matrix *= h_matrix
           end 
         
         # return values
