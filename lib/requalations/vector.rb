@@ -99,9 +99,19 @@ module Requalations
   ## Class methods
   # Module to be passed into #extend for Vector. 
   module VectorClassMethods
+    
+    # Creates a vector with N zero values in it
+    #
     def blank( size )
       ::Vector.elements(Array.new(size, 0))
     end
+    
+    # Creates a vector from range
+    # 
+    def range( range )
+      ::Vector.elements( range.to_a )
+    end
+    
   end
 end
 

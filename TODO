@@ -1,5 +1,0 @@
-todo: 
-
-  1) Create and inject #blank methods into Matrix and Vector classes. 
-  2) Move LU and inverse using lu into a separate source file for matrix class
-  3) Create a better specs structure and format for each lab excersize 

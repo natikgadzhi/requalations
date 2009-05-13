@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 # 1.5 of Moscow University of Aviation 08-306@2009 labs
 # Provide a methods to get QR matrix decomposition and

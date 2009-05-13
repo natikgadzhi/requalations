@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe Requalations::Linear::Equalation do
   
@@ -21,31 +21,6 @@ describe Requalations::Linear::Equalation do
     
     @equalaion_right = Vector.elements( [ [-126], [-42], [-115], [-67]])
   end
-  
-  
-  # Проверяем разложение
-  it "should perform LUP" do
-    # получим матрицы разложения 
-    l,u,p = @equalation_left.lu
-    
-    a = p * @equalation_left
-    b = l * u
-    # Проверяем, выполняется ли условие разложения
-    a.should == b
-  end
-  
-  
-  # Проверяем детерминант
-  it "should get matrix determinant from LUP" do
-    l,u,p = @equalation_left.lu
-    @equalation_left.determinant.should == (l*u*p).determinant 
-  end
-  
-  # # Проверяем обратную матрицу
-  # it "should get inverted matrix from LUP" do
-  #    l,u,p = @equalation_left.lu
-  #    
-  # end
   
   # Проверка самого класса уравнения.
   it "should solve the equalation" do

@@ -25,6 +25,11 @@ describe Vector do
       Vector.should respond_to(:blank)
       Vector.blank(4).to_a.should == [0,0,0,0]
     end
+    
+    it "should have #range method to build from range!" do
+      Vector.should respond_to(:range)
+      Vector.range(0...5).to_a.should == [0,1,2,3,4]
+    end
   end
   
   ## Instance methods 

@@ -8,7 +8,7 @@ module Requalations
       ## Constants 
       
       # These options are used in #solve method.
-      DEFAULT_SOLVE_OPTIONS = { :with => :LU }
+      DEFAULT_SOLVE_OPTIONS = { :with => :lu_decomposition }
       
       ## attributes
       
@@ -64,38 +64,34 @@ module Requalations
         
       # Solves the equalation using LU method. 
       # 
-      def solve_using_LU( options = {})
+      def solve_using_lu_decomposition( options = {})
         # We will use our C matrix, which should contain U + L - E 
-        @left_side_matrix.lu if @left_side_matrix.c.nil?
+        @left_side_matrix.lu_decompose unless @left_side_matrix.lu_decomposed?
 
         # push matrix size to n, so i can use it later in cycles
-        n = @left_side_matrix.column_size
+        n = @left_side_matrix.n
         
         # empty array for the solution
-        @solution_vector = []
-        for i in 0...n do
-          @solution_vector[i] = 0
-        end
+        @solution_vector = ::Vector.blank(n)
         
         # Implementation. Oh god, i'm tired ^^ 
         for i in 0...n do
           t = 0;
           for j in 0...i do
-            t = t + @left_side_matrix.c[i,j]*@solution_vector[j]
+            t = t + @left_side_matrix.lu_decomposition_matrix[i,j]*@solution_vector[j]
           end
-          @solution_vector[i] = @right_side_vector[@left_side_matrix.p_vector[i]] - t
+          @solution_vector[i] = @right_side_vector[@left_side_matrix.permutation_vector[i]] - t
         end
         
         (n-1).downto(0) do |i|
           t = 0
           for j in (i + 1)...n do
-            t = t + @left_side_matrix.c[i,j]*@solution_vector[j]
+            t = t + @left_side_matrix.lu_decomposition_matrix[i,j]*@solution_vector[j]
           end
-          @solution_vector[i] = ( @solution_vector[i] - t )/@left_side_matrix.c[i,i]
+          @solution_vector[i] = ( @solution_vector[i] - t )/@left_side_matrix.lu_decomposition_matrix[i,i]
         end
         
-        # Pass the results into a vector and return them
-        ::Vector.elements(@solution_vector)
+        @solution_vector
       end
       
       

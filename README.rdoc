@@ -1,6 +1,30 @@
 = requalations
 
-Ruby Equalations is a tool to solve linalg equalations using all the flexibility of ruby. 
+Requalations is just a study / experimental project. It's written for Moscow Institute of Aviation in 2009, 08-306 group. 
+
+Here's what it can do:
+  * Extend ruby Matrix and Vector classes with some useful methods: #blank for initialization with zeroes, #range in Vector class to init with 1...6 ranges or smth. 
+  * LU_Decomposition with Matrix class instead of BigDecimal
+  * QR decomposition.
+  * Solving systems of linear equalations with misc methods: based on lu decomposition, qr decomposition, iterational methods, jacobi rotations method and so on. 
+  
+Requalations are slow. It's written in ruby, and it uses some maths which is allways better to use in C language, or fortran. 
+Requalations has some spec suite, you can try it by youself to understand, is it suitable. 
+
+No requirements here, you just install the gem, require requalations and you've got your @matrix.lu_decomposition! no lapack install routines or anything anoying. 
+
+== Labs 
+As i said before, it's a study project. 
+So here's the list of what it does for my labs: 
+
+1. Linear systems / matrices. 
+1.1 LU decomposition / inverse / determinant - spec/matrix/LU_spec.rb for matrix-related staff and spec/labs/1_1_spec.rb for equalation
+1.2
+1.3
+1.4
+1.5
+
+2. 
 
 == Copyright
 

@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe Matrix do
   before(:each) do
@@ -39,34 +39,18 @@ describe Matrix do
     @matrix.row(2).should == Vector.elements([1,2,3])    
   end
   
-  it "should get lu decomposition" do
-    l, u, p = @left_side_matrix.lu
-    
-    a = p * @left_side_matrix
-    b = l * u
-
-    a.should == b
+  it "has shorthand methods: #n and #size" do
+    @matrix.n.should == @matrix.column_size
   end
-  
-  # it "should be able to get inverse matrix" do
-  #   inverse = @left_side_matrix.inverse_using_lup
-  #   
-  #   puts @left_side_matrix.inverse
-  #   puts "<br>"
-  #   puts inverse
-  #   # (@left_side_matrix * inverse).should == Matrix::identity(@left_side_matrix.column_size)
-  # end
   
   it "should find eigenvectors" do
     values, vectors, iterations =  @eigen_matrix.eigenvalues_using_rotations( 0.3 )
-    
+
     puts values.to_a.map {|e| e.round }
     puts "<br>"
     puts "eigen vectors: #{vectors.map { |e| e.to_a.map{ |v| v.round }; "#{e}<br>"}}<br>"
-    
+
     puts " in #{iterations} rotations"
   end
-  
-  
   
 end
