@@ -99,11 +99,14 @@ module Requalations
       # With 3-diagonal matrix of equalation at the left side 
       # 
       def solve_using_sweep( options = {})
+        # Let's create matrix size shorthand. It's just more fun. 
+        n = @left_side_matrix.n
+        
         # First thing to do is setting p and q coeficients in 
         # zeros
-        p = []
-        q = []
-        @solution_vector = []
+        p = ::Vector.blank(n)
+        q = ::Vector.blank(n)
+        @solution_vector = ::Vector.blank(n)
         
         # P1 and Q1 depends only on left_matrix, so 
         p[1] = @left_side_matrix[0,1] / -@left_side_matrix[0,0] 
@@ -113,7 +116,6 @@ module Requalations
         
         # Direct flow of sweep method
         for i in 2...n do
-          puts "direct<br>"
           p[i] = @left_side_matrix[i-1,i] / ( -@left_side_matrix[i-1, i-1] - @left_side_matrix[i-1, i-2]*p[i-1] ) 
           q[i] = ( @left_side_matrix[i-1,i-2]*q[i-1] - @right_side_vector[i-1] ) / 
             ( -@left_side_matrix[i-1,i-1] - @left_side_matrix[i-1, i-2]*p[i-1] )
@@ -124,11 +126,10 @@ module Requalations
         # Reverse
         (n-2).downto(0) do |i|
           @solution_vector[i] = p[i+1]*@solution_vector[i+1] + q[i+1]
-          puts "reverse: solution#{i} => #{@solution_vector[i]}<br>"
         end
         
         # Pass the results into a vector and return them
-        ::Vector.elements(@solution_vector)
+        @solution_vector
       end
       
       
