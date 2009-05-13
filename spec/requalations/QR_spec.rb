@@ -35,7 +35,7 @@ describe ::Matrix do
   # Eigenvalues
   # 
   it "should provide eigenvalues based on QR decomposition" do
-    
+    puts @matrix.eigenvalues_using_qr(0.1)
   end
   
 end

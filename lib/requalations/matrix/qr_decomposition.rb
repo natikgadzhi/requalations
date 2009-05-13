@@ -91,9 +91,39 @@ module Requalations
             q_matrix *= h_matrix
           end 
         
-        # return values
-        [q_matrix, r_matrix, iterations_count]  
+          # return values
+          [q_matrix, r_matrix, iterations_count]  
         end
+        
+        # Retrieves matrix eigenvalues using QR decomposition
+        # 
+        def eigenvalues_using_qr( eps )
+          # prepare start values - clone the matrix and do the first QR
+          current_matrix = self.clone
+          n = self.column_size
+          
+          begin
+            current_q, current_r = current_matrix.qr
+            current_matrix = current_r * current_q
+            
+            # Check for real eigenvalues
+            for i in 0...n do
+              norm = 0
+              for j in (i + 1)...n do
+                norm += current_matrix[i,j] ** 2 
+              end
+              norm = norm ** 0.5
+            end
+          end while norm > eps
+          
+          eigenvals = []
+          for i in 0...n do
+            eigenvals[i] = current_matrix[i,i]
+          end
+          puts "#{current_matrix}<br><br>"
+          eigenvals
+        end
+        
       end
     end
   end
