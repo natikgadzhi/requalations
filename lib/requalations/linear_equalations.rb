@@ -140,11 +140,11 @@ module Requalations
         
         # Let's understand, what will we need here?
         # Remember a shorthand for the left side matrix size
-        n =  @left_side_matrix.column_size
+        n =  @left_side_matrix.n
         # Then create a blank vector for current solution vector
-        @solution_vector = Vector.blank(n)
+        @solution_vector = ::Vector.blank(n)
         # we will store a previous solution into this, so we don't loose previous iteration's data
-        prev_solution_vector = Vector.blank(n)
+        prev_solution_vector = ::Vector.blank(n)
         # Store epsilon 
         eps = options.has_key?(:eps) ? options[:eps] : 0.001
         iterations_count = 0
@@ -186,11 +186,11 @@ module Requalations
         
         # Let's understand, what will we need here?
         # Remember a shorthand for the left side matrix size
-        n =  @left_side_matrix.column_size
+        n =  @left_side_matrix.n
         # Then create a blank vector for current solution vector
-        @solution_vector = Vector.blank(n)
+        @solution_vector = ::Vector.blank(n)
         # we will store a previous solution into this, so we don't loose previous iteration's data
-        prev_solution_vector = Vector.blank(n)
+        prev_solution_vector = ::Vector.blank(n)
         # Store epsilon 
         eps = options.has_key?(:eps) ? options[:eps] : 0.001
         iterations_count = 0

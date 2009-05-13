@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 # Covers 1.3
 describe "Iterational Methods" do
@@ -17,8 +17,6 @@ describe "Iterational Methods" do
     puts vector.to_a.map { |e| e.round }
     
     puts "in #{iterations_count} iterations."
-    
-    # Vector[-8, 4, -5, -5]
   end
   
   it "Can solve using seidel method" do
