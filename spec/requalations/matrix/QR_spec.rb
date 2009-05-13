@@ -13,29 +13,31 @@ describe ::Matrix do
   before(:each) do
     # The matrix to work with
     @matrix = Matrix.rows( [
-      [ 6, 5, -6],
-      [ 4, -6, 9],
-      [ 6, -6, 1]
+      [ 6.0, 5.0, -6.0],
+      [ 4.0, -6.0, 9.0],
+      [ 6.0, -6.0, 1.0]
     ])
   end
   
   # First step - check, if the matrix class has the method
-  it "has #qr method" do
-    Matrix.public_instance_methods.should include("qr")
+  it "has #qr_decompose method" do
+    Matrix.public_instance_methods.should include("qr_decompose")
   end
   
   # Specify QR
   # 
   it "should provide a valid QR decomposition" do
     # at least, we ensure that it raises no error and does something
-    q, r, i = @matrix.qr
-    puts "Q: #{q}<br>R: #{r}<br> in #{i} iterations."
+    q, r, i = @matrix.qr_decompose
+    
+    same_matrix = q * r
+    same_matrix.to_a.map{ |row| row.map{ |element| element.round } }.should == @matrix.to_a
   end
   
   # Eigenvalues
   # 
   it "should provide eigenvalues based on QR decomposition" do
-    puts @matrix.eigenvalues_using_qr(0.1)
+    puts @matrix.eigenvalues_using_qr_decomposition(0.1)
   end
   
 end

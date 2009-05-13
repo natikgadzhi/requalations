@@ -19,27 +19,27 @@ module Requalations
     module Decompositions
       # QR decomposition and friends
       module QR
+        attr_reader :q_matrix, :r_matrix
+        
+        def qr_decomposed?
+          !@q_matrix.nil? && !@r_matrix.nil?
+        end
         
         # Retrieves Q and R matrices using Householder method
         # 
-        def qr
-          # matrix size shorthand
-          n = column_size
+        def qr_decompose
           # iterations counter
           iterations_count = 0
           
           # This is what we're going to return # 
           # Q matrix
-          q_matrix = ::Matrix.identity(n)
+          @q_matrix = ::Matrix.identity(n)
           # R matrix
-          r_matrix = self.clone
+          @r_matrix = self.clone
           
           # This is our internal calculation staff
           # We will calculate householder matrix
-          h_matrix = []
-          
-          # V vector for H matrix calculation.
-          v_vector = []
+          h_matrix = ::Matrix.blank(n)
           
           # Once more here. 
           # Feel free to drop me a line on email or github. 
@@ -65,17 +65,17 @@ module Requalations
               
               # Ith element in V is kinda complecated: 
               if k == i
-                sign = r_matrix[k,k] < 0 ? -1 : 1
+                sign = @r_matrix[k,k] < 0 ? -1 : 1
                 norm = 0
                 for j in k...n
-                  norm = norm + r_matrix[j,k] ** 2
+                  norm = norm + @r_matrix[j,k] ** 2
                 end
                 norm = norm ** 0.5
                 
-                v_vector[k] = [ r_matrix[k,k] + sign * norm ] 
+                v_vector[k] = [ @r_matrix[k,k] + sign * norm ] 
               end
               
-              v_vector[k] = [ r_matrix[i,k] ] if k > i
+              v_vector[k] = [ @r_matrix[i,k] ] if k > i
             end
             v_vector = ::Matrix.columns(v_vector).t
 
@@ -87,40 +87,43 @@ module Requalations
             # this step is done. 
             # R is one step closer. 
             # And q is too 
-            r_matrix = h_matrix * r_matrix
-            q_matrix *= h_matrix
+            @r_matrix = h_matrix * @r_matrix
+            @q_matrix *= h_matrix
           end 
         
           # return values
-          [q_matrix, r_matrix, iterations_count]  
+          [@q_matrix, @r_matrix, iterations_count]  
         end
         
         # Retrieves matrix eigenvalues using QR decomposition
         # 
-        def eigenvalues_using_qr( eps )
+        def eigenvalues_using_qr_decomposition( eps )
+          
           # prepare start values - clone the matrix and do the first QR
           current_matrix = self.clone
-          n = self.column_size
-          
           begin
-            current_q, current_r = current_matrix.qr
+            current_q, current_r = current_matrix.qr_decompose
+            # mutate matrix to R*Q instead of QR. 
             current_matrix = current_r * current_q
             
+            norm = []
+            
             # Check for real eigenvalues
-            for i in 0...n do
-              norm = 0
+            for i in 0...(n-1) do
+              norm[i] = 0
               for j in (i + 1)...n do
-                norm += current_matrix[i,j] ** 2 
+                norm[i] += current_matrix[i,j] ** 2 
               end
-              norm = norm ** 0.5
+              norm[i] = norm[i] ** 0.5
+              puts norm
             end
-          end while norm > eps
+            puts "iteration! #{norm}"
+          end while [norm.max.abs, norm.min.abs].max > eps
           
           eigenvals = []
           for i in 0...n do
             eigenvals[i] = current_matrix[i,i]
           end
-          puts "#{current_matrix}<br><br>"
           eigenvals
         end
         

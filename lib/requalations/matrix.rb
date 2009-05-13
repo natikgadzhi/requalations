@@ -127,10 +127,22 @@ module Requalations
     end
 
   end
+  
+  module MatrixClassMethods
+    def blank (size)
+      row = Array.new(size, 0)
+      zero_rows = []
+      size.times do |i|
+        zero_rows[i] = row
+      end
+      ::Matrix.rows(zero_rows)
+    end
+  end
 end
 
 # If Matrix is already initialized, include Requalations::Matrix into the original one
-Matrix.send( :include, ::Requalations::Matrix ) if defined?( Matrix )
+Matrix.send( :include, ::Requalations::Matrix ) if defined?( ::Matrix )
+Matrix.send( :extend, ::Requalations::MatrixClassMethods ) if defined?( ::Matrix )
 
 # Also include additional matrix modules. 
 # There are some modules for extended matrix functionality in ./lib/matrix directory 
