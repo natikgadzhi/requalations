@@ -23,4 +23,5 @@ require File.expand_path("#{requalations_dir}/vector.rb")
 require File.expand_path("#{requalations_dir}/matrix.rb")
 
 # At this moment, it the right time to require equalation classes. 
-require File.expand_path("#{requalations_dir}/linear_equalations.rb")
+require File.expand_path("#{requalations_dir}/linear_equalation.rb")
+require File.expand_path("#{requalations_dir}/nonlinear_equalation.rb")
