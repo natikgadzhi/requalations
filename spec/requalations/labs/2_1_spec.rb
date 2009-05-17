@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 # Covers 2.1 task
-describe Requalations::Linear::Equalation do
+describe Requalations::NonLinear::Equalation do
 
   # итерации
   it "solves non-linear equalation using iterative_method" do
